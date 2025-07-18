@@ -1,1 +1,1 @@
-export { PostsPage } from './ui/posts-page';
+export { Component } from './ui/posts-page';

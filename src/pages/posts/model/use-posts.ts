@@ -1,22 +1,17 @@
-import { useEffect } from 'react';
+import { useAppSelector } from '@/shared/lib';
 
-import { apiFetch } from '@/shared/api';
+import { postStore } from '@/entities/post';
 
 export function usePosts() {
-  useEffect(() => {
-    const response = apiFetch('/posts?limit=10&skip=0', { method: 'GET' })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-      });
-
-    console.log(response);
-  }, []);
+  const posts = useAppSelector(postStore.selectors.selectPosts);
+  const isLoading = useAppSelector(postStore.selectors.selectIsLoading);
+  const error = useAppSelector(postStore.selectors.selectError);
+  const isError = useAppSelector(postStore.selectors.selectIsError);
 
   return {
-    posts: [],
-    total: 0,
-    skip: 0,
-    limit: 10
+    posts,
+    isLoading,
+    isError,
+    error
   };
 }

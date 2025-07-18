@@ -1,11 +1,13 @@
-import { PostsPage } from '@/pages/posts';
-
-import './app.css';
+import { AppLoader } from './app-loader';
+import { AppProvider } from './app-provider';
+import { AppRouter } from './app-router';
+import './index.css';
 
 export function App() {
   return (
-    <>
-      <PostsPage />
-    </>
+    <AppProvider>
+      <AppLoader />
+      <AppRouter />
+    </AppProvider>
   );
 }
