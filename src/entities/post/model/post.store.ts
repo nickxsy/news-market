@@ -10,6 +10,8 @@ type PostsState = PostsResponse & {
   isLoading: boolean;
   isError: boolean;
   error?: string;
+  hasMore?: boolean;
+  page: number;
 };
 
 const initialState: PostsState = {
@@ -19,7 +21,9 @@ const initialState: PostsState = {
   limit: 10,
   isLoading: false,
   isError: false,
-  error: undefined
+  error: undefined,
+  hasMore: true,
+  page: 1
 };
 
 export const postSlice = createSlice({
@@ -32,29 +36,31 @@ export const postSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(loadPosts.fulfilled, (state, action) => {
-      state.posts = action.payload.posts;
-      state.total = action.payload.total;
-      state.skip = action.payload.skip;
-      state.limit = action.payload.limit;
+      const { posts, total, skip, limit, page } = action.payload;
+
+      if (page === 1) {
+        state.posts = posts;
+      } else {
+        state.posts = [...state.posts, ...posts];
+      }
+
+      state.total = total;
+      state.skip = skip;
+      state.limit = limit;
+      state.page = page;
       state.isLoading = false;
+
+      state.hasMore = state.posts.length < total;
     });
     builder.addCase(loadPosts.rejected, (state, action) => {
       state.isLoading = false;
       state.isError = true;
       state.error = action.error.message;
-      state.posts = [];
-      state.total = 0;
-      state.skip = 0;
-      state.limit = 10;
     });
     builder.addCase(loadPosts.pending, state => {
       state.isLoading = true;
       state.isError = false;
       state.error = undefined;
-      state.posts = [];
-      state.total = 0;
-      state.skip = 0;
-      state.limit = 10;
     });
   }
 });
@@ -85,13 +91,25 @@ const selectPostById = createSelector(
   (posts, id) => posts.find((post: Post) => post.id === id)
 );
 
+const selectPostHasMore = createSelector(
+  (state: RootState) => state.posts.hasMore,
+  posts => posts
+);
+
+const selectPostPage = createSelector(
+  (state: RootState) => state.posts.page,
+  posts => posts
+);
+
 export const postStore = {
   selectors: {
     selectIsLoading,
     selectIsError,
     selectError,
     selectPosts,
-    selectPostById
+    selectPostById,
+    selectPostHasMore,
+    selectPostPage
   },
   actions: {
     loadPosts

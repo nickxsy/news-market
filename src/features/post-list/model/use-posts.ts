@@ -7,11 +7,15 @@ export function usePosts() {
   const isLoading = useAppSelector(postStore.selectors.selectIsLoading);
   const error = useAppSelector(postStore.selectors.selectError);
   const isError = useAppSelector(postStore.selectors.selectIsError);
+  const hasMore = useAppSelector(postStore.selectors.selectPostHasMore);
+  const page = useAppSelector(postStore.selectors.selectPostPage);
 
   return {
     posts,
     isLoading,
     isError,
-    error
+    hasMore,
+    error,
+    page
   };
 }

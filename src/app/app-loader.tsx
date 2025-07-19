@@ -11,7 +11,7 @@ export function AppLoader() {
 
   useEffect(() => {
     setIsLoading(true);
-    Promise.all([dispatch(postStore.actions.loadPosts())])
+    Promise.all([dispatch(postStore.actions.loadPosts(1))])
       .then(() => {
         console.log('App loaded');
       })
