@@ -1,4 +1,5 @@
 export const ROUTES = {
-  posts: '/',
-  postDetails: '/post/:id'
+  POSTS: '/',
+  POST_DETAILS: '/post/:id',
+  NOT_FOUND: '*'
 };

@@ -1,11 +1,8 @@
-import { Button, Empty, Flex } from 'antd';
-import { useNavigate } from 'react-router';
+import { Empty, Flex } from 'antd';
 
-import { ROUTES } from '@/shared/model';
+import { BackHomeButton } from '@/features/back-home-button';
 
 export function PostDetailsNotFound() {
-  const navigate = useNavigate();
-
   return (
     <Flex
       justify="center"
@@ -14,13 +11,9 @@ export function PostDetailsNotFound() {
       gap={12}
       style={{ height: '100%', width: '100%' }}
     >
-      <Empty description="Пост не найден" />
-      <Button
-        type="primary"
-        onClick={() => navigate(ROUTES.posts, { replace: true })}
-      >
-        Вернуться на главную
-      </Button>
+      <Empty description="Пост не найден">
+        <BackHomeButton />
+      </Empty>
     </Flex>
   );
 }

@@ -30,7 +30,7 @@ export function AppLayout() {
   return (
     <Layout>
       <Layout.Header style={styles.header}>
-        <Link to={ROUTES.posts}>
+        <Link to={ROUTES.POSTS}>
           <HomeFilled style={{ fontSize: 24 }} />
         </Link>
       </Layout.Header>

@@ -9,12 +9,16 @@ const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       {
-        path: ROUTES.posts,
+        path: ROUTES.POSTS,
         lazy: () => import('@/pages/posts')
       },
       {
-        path: ROUTES.postDetails,
+        path: ROUTES.POST_DETAILS,
         lazy: () => import('@/pages/post-details')
+      },
+      {
+        path: ROUTES.NOT_FOUND,
+        lazy: () => import('@/pages/not-found')
       }
     ]
   }
