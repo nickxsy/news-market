@@ -1,14 +1,38 @@
-import { Button, Spin, Tag, Typography } from 'antd';
+import {
+  ArrowLeftOutlined,
+  DislikeOutlined,
+  EyeOutlined,
+  LikeOutlined,
+  UserOutlined
+} from '@ant-design/icons';
+import {
+  Button,
+  Card,
+  Col,
+  Divider,
+  Flex,
+  Row,
+  Space,
+  Spin,
+  Tag,
+  Typography
+} from 'antd';
 
 import { usePostDetails } from '../model/use-post-details';
 
 import { PostDetailsNotFound } from './post-details-not-found';
 
+const { Title, Text, Paragraph } = Typography;
+
 export function PostDetailsPage() {
   const { post, isLoading, error } = usePostDetails();
 
   if (isLoading) {
-    return <Spin />;
+    return (
+      <Flex justify="center" align="center" style={{ minHeight: '200px' }}>
+        <Spin size="large" />
+      </Flex>
+    );
   }
 
   if (!post || error) {
@@ -16,50 +40,73 @@ export function PostDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Заголовок */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <Typography.Title level={1}>{post.title}</Typography.Title>
+    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
+      <Card>
+        <Title level={1} style={{ marginBottom: '24px' }}>
+          {post.title}
+        </Title>
 
-          {/* Мета-информация */}
-          <div className="flex items-center justify-between text-sm text-gray-500 mb-6">
-            <div className="flex items-center space-x-4">
-              <Typography.Text>Автор ID: {post.userId}</Typography.Text>
-              <Typography.Text>Просмотры: {post.views}</Typography.Text>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Typography.Text>👍 {post.reactions.likes}</Typography.Text>
-              <Typography.Text>👎 {post.reactions.dislikes}</Typography.Text>
-            </div>
+        <Row gutter={[16, 16]} style={{ marginBottom: '24px' }}>
+          <Col xs={24} sm={12}>
+            <Space size="large">
+              <Space>
+                <UserOutlined />
+                <Text type="secondary">Автор ID: {post.userId}</Text>
+              </Space>
+              <Space>
+                <EyeOutlined />
+                <Text type="secondary">Просмотры: {post.views}</Text>
+              </Space>
+            </Space>
+          </Col>
+          <Col xs={24} sm={12}>
+            <Space size="large">
+              <Space>
+                <LikeOutlined style={{ color: '#52c41a' }} />
+                <Text type="secondary">{post.reactions.likes}</Text>
+              </Space>
+              <Space>
+                <DislikeOutlined style={{ color: '#ff4d4f' }} />
+                <Text type="secondary">{post.reactions.dislikes}</Text>
+              </Space>
+            </Space>
+          </Col>
+        </Row>
+
+        {post.tags.length > 0 && (
+          <div style={{ marginBottom: '24px' }}>
+            <Text strong style={{ display: 'block', marginBottom: '8px' }}>
+              Теги:
+            </Text>
+            <Space wrap>
+              {post.tags.map((tag: string) => (
+                <Tag key={tag} color="blue">
+                  {tag}
+                </Tag>
+              ))}
+            </Space>
           </div>
+        )}
 
-          {/* Теги */}
-          {post.tags.length > 0 && (
-            <div className="mb-6">
-              <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag: string) => (
-                  <Tag key={tag} color="blue">
-                    {tag}
-                  </Tag>
-                ))}
-              </div>
-            </div>
-          )}
+        <Divider />
+
+        <div style={{ marginBottom: '24px' }}>
+          <Paragraph style={{ fontSize: '16px', lineHeight: '1.8' }}>
+            {post.body}
+          </Paragraph>
         </div>
 
-        {/* Содержимое поста */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="prose prose-lg max-w-none">
-            <Typography.Paragraph>{post.body}</Typography.Paragraph>
-          </div>
-        </div>
-
-        {/* Кнопки действий */}
-        <div className="mt-6 flex justify-between">
-          <Button onClick={() => window.history.back()}>← Назад</Button>
-        </div>
-      </div>
+        <Flex justify="start">
+          <Button
+            type="primary"
+            icon={<ArrowLeftOutlined />}
+            onClick={() => window.history.back()}
+            size="large"
+          >
+            Назад
+          </Button>
+        </Flex>
+      </Card>
     </div>
   );
 }
